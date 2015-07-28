@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+  <script src="./app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body ng-app="PathApp"
+      ng-controller="PathController"
+      ng-keydown="registerKey($event)"
+      ng-keyup="releaseKey($event)">
+  <h3>
+    Make you some SVG paths!
+  </h3>
+  <main>
+    <svg ng-mousedown="setAction($event)"
+         ng-mouseup="resolveAction($event)"
+         ng-mousemove="determineDrag($event)">
+
+      <path ng-repeat="pathPoints in paths track by $index"
+            ng-attr-d="{{ pathString(pathPoints) }}"
+            ng-attr-stroke="{{ pathPoints.currentPathOptions.stroke }}"
+            ng-attr-stroke-width="{{ pathPoints.currentPathOptions.strokeWidth }}"
+            ng-attr-fill="{{ pathPoints.currentPathOptions.fill }}"
+            ng-mousedown="bringForward($event, $index)" />
+
+      <path ng-if="!editable"
+            ng-attr-d="{{ pathString(points) }}"
+            ng-attr-stroke="{{ points.currentPathOptions.stroke }}"
+            ng-attr-stroke-width="{{ points.currentPathOptions.strokeWidth }}"
+            ng-attr-fill="{{ points.currentPathOptions.fill }}" />
+
+      <path ng-if="editable"
+            ng-attr-d="{{ pathString(points) }}"
+            ng-attr-stroke-width="0"
+            ng-attr-fill="{{ points.currentPathOptions.fill }}" />
+
+      <line ng-if="editable"
+            ng-repeat="endPoints in pathPairs"
+            ng-attr-x1="{{endPoints[0].x}}"
+            ng-attr-y1="{{endPoints[0].y}}"
+            ng-attr-x2="{{endPoints[1].x}}"
+            ng-attr-y2="{{endPoints[1].y}}"
+            ng-attr-stroke="{{ points.currentPathOptions.stroke }}"
+            ng-attr-stroke-width="{{ points.currentPathOptions.strokeWidth }}"
+            stroke-linecap="round"
+            ng-attr-fill="{{ points.currentPathOptions.fill }}"
+            ng-mousedown="splitLine($event, endPoints)" />
+
+      <circle ng-if="editable"
+              ng-repeat="point in points"
+              ng-attr-cx="{{point.x}}"
+              ng-attr-cy="{{point.y}}"
+              ng-attr-class="{{ circleClass(point) }}"
+              ng-mousedown="setAction($event, point)"
+              ng-mouseup="resolveAction($event, point)"/>
+    </svg>
+  </main>
+  <div class="instructions">
+    <h4>Click to create new nodes</h4>
+    <h4>Shift-click a node to remove it</h4>
+    <h4>Drag a node to reposition it</h4>
+    <h4>New nodes are added between the first and last node in the list (highlighted with green)</h4>
+    <hr />
+    <button ng-click="toggleEditable()">
+      {{ editable ? "Prevent Drag" : "Permit Drag" }}
+    </button>
+    <div>Fill</div>
+    <input type="text"
+           ng-model="points.currentPathOptions.fill">
+    <div>Stroke</div>
+    <input type="text"
+           ng-model="points.currentPathOptions.stroke">
+    <div>Stroke Width</div>
+    <input type="number"
+           ng-model="points.currentPathOptions.strokeWidth">
+    <button ng-click="startNextPath()">
+      Commit figure
+    </button>
+    <button ng-click="clearDrawing()">
+      Clear drawing
+    </button>
+    <hr />
+    <code>
+      {{ pathString(points) }}
+      {{ points.currentPathOptions }}
+    </code>
+  </div>
+</body>
+</html>

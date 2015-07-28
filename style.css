@@ -1,0 +1,79 @@
+* {
+  font: inherit;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 21px;
+  font-family: sans-serif;
+}
+
+body {
+
+  overflow: hidden;
+}
+
+main {
+  width: 800px;
+  float: left;
+}
+
+.instructions {
+  width: calc(100% - 820px);
+  float: left;
+  margin-left: 20px;
+}
+
+.instructions > h4 {
+  margin-top: 0;
+}
+
+svg {
+  width: 100%;
+  height: 600px;
+  background: lightblue;
+}
+
+h3 {
+  font-size: 1.3rem;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 0.25em;
+}
+
+svg > circle {
+  stroke: green;
+  fill: orange;
+  r: 8;
+}
+
+svg > circle.end {
+  stroke: black;
+  fill: green;
+}
+
+svg > circle:hover {
+  cursor: pointer;
+  stroke: white;
+  fill: pink;
+}
+
+svg > circle.dragging {
+  stroke: gold;
+  fill: red;
+}
+
+svg > line:hover {
+  stroke: gold;
+}
+
+code {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+input, button {
+  display: block;
+  width: 100%;
+  padding: 0.25em;
+}
